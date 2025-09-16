@@ -20,7 +20,7 @@ const Payment = ({ client }) => {
 
       // ✅ Call Appwrite Function
       const res = await functions.createExecution(
-        "create-order-fn-id", // replace with your Appwrite Function ID
+        "68c8580a0004ac37269e", // replace with your Appwrite Function ID
         JSON.stringify({
           amount: Number(amount),
           userId: "demoUser", // Replace with logged-in user ID later
