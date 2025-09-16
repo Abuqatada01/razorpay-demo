@@ -18,20 +18,27 @@ const Payment = ({ client }) => {
       setLoading(true);
       setMessage("");
 
-      // Call Appwrite Function to create order
+      // ✅ Call Appwrite Function
       const res = await functions.createExecution(
-        "create-order-fn-id", // replace with your function ID
+        "create-order-fn-id", // replace with your Appwrite Function ID
         JSON.stringify({
           amount: Number(amount),
-          userId: "demoUser", // use auth user id in real app
+          userId: "demoUser", // Replace with logged-in user ID later
           productName: product,
         })
       );
 
-      const { order } = JSON.parse(res.responseBody);
+      // ✅ Parse response safely
+      const data = JSON.parse(res.responseBody);
+      if (!data.order) {
+        throw new Error(data.message || "Order creation failed");
+      }
 
+      const { order } = data;
+
+      // ✅ Razorpay Checkout
       const options = {
-        key: import.meta.env.VITE_RAZORPAY_KEY_ID, // from .env
+        key: import.meta.env.VITE_RAZORPAY_KEY_ID,
         order_id: order.id,
         name: "My Shop",
         description: product,
